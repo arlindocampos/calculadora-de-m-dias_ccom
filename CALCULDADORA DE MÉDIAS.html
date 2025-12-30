@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)file:///C:/Users/arlin/Desktop/teste%201%20gemini%20calculadora.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+
+<script>
+  // Esses dados você copia da aba "Configuração do Projeto" no Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDzZcTATUuebrZ-0wH3GX-MFfWMNMUGbwY",
+    authDomain: "calculadora-alunos-ccom.firebaseapp.com",
+    databaseURL: "https://calculadora-alunos-ccom-default-rtdb.firebaseio.com",
+    projectId: "calculadora-alunos-ccom",
+    storageBucket: "calculadora-alunos-ccom.firebasestorage.app",
+    messagingSenderId: "529377303750",
+    appId: "1:529377303750:web:a0e87c344a7c0535690bc7",
+    measurementId: "G-GXELJKZLKQ"
+  };
+  
+  // Inicializa o Firebase
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+</script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>CALCULDADORA DE MÉDIAS</title>
+  <style>
+    /* Adicione isso ao seu CSS */
+    .taf-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      align-items: flex-start;
+    }
+
+    .taf-input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 48%; /* Ocupa quase metade do espaço cada */
+    }
+
+    .nota-preview-taf {
+      font-size: 11px;
+      color: #00ffcc; /* Cor de destaque para a nota */
+      margin-top: 4px;
+      font-weight:lighter;
+      height: 15px; /* Altura fixa para não pular a tela */
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 12px auto; /* centraliza */
+      max-width: 120px;        /* tamanho máximo */
+      width: 100%;             /* adapta no mobile */
+      height: auto;
+      
+}
+    body {
+      font-family: Arial, sans-serif;
+      color: #ffffff;
+      text-transform: uppercase;
+      background: #161515;
+      padding: 10px;
+    }
+    .container {
+      background: rgb(39, 39, 39);
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0px 1000px rgba(0, 149, 255, 0.451);
+      position: relative;
+    }
+    h3 {
+      text-align: center;
+      font-size: 24px;
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+      letter-spacing: 1.5px;
+      font-weight:lighter;
+    }
+    .materia {
+      border: 2px solid #0084ff;
+      padding: 35px;
+      margin-top: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      text-align: left;
+      font-weight: bold;
+    }
+    span {
+      display: block;
+      margin-top: 10px;
+      text-align: left;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 6px;
+      margin-top: 10px;
+      text-align: center;
+      font-size: 13px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background-color: #1f1f1f;
+      color: #fff;
+    }
+    .resultado {
+      margin: 20px auto 0;        /* centraliza e afasta do topo */
+      background-color: #0084ff60;
+      font-weight: bold;
+      text-align: center;
+      font-size: 15px;
+
+      padding: 10px 16px;         /* espaçamento interno */
+      width: fit-content;         /* não ocupa toda a largura */
+      border-radius: 8px;         /* cantos arredondados */
+      border: 2px solid #0084ff;  /* borda */
+    }
+    .final {
+      margin: 40px auto;        /* centraliza o box */
+      font-size: 72px;
+      text-align: center;
+      font-weight: bold;
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+      letter-spacing: 1.5px;
+
+      padding: 14px 20px;       /* espaço interno */
+      border-radius: 10px;
+      border: 6px solid #056abc;
+      box-shadow:#0084ff;
+
+      background-color: #007bff6c;
+      color: #c6c6c6;;
+
+      width: fit-content;       /* largura conforme o texto */
+}
+
+    .assinatura {
+        position: absolute;
+        top: 10px;
+        right: 14px;
+        font-size: 12px;
+        color: #00eeff;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    }
+    .nota-prova {
+      margin-top: 20px;
+      font-size: 14px;
+      text-align: center;
+      font-weight: bold;
+      color: #00ffcc;
+      font-weight: lighter;
+    }
+    .nota-input {
+      width: 48px;
+      padding: 4px;
+      text-align: center;
+
+      font-size: 13px;
+      border-radius: 6px;
+      border: 1px solid #555;
+
+      background-color: #1f1f1f;
+      color: #fff;
+    }
+    h2 {
+      padding: 0px;
+      text-align: center;
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+      font-size: 40px;
+      font-weight: lighter;
+      color: #fff;
+    }
+  </style>
+</head>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon" href="link-da-sua-logo.png">
+<body>
+  <div class="container">
+    <div class="assinatura">AL CAMPOS</div>
+    <img src="data:image/png;base64,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" alt="Logo" class="logo">
+    <h2>Calculadora de Médias</h2>
+
+<div class="aluno-info" style="margin-bottom: 20px;">
+    <label>SELECIONE O ALUNO:</label>
+    <select id="selecao_aluno" onchange="trocarAluno()" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #222; color: white; font-weight: bold;">
+      <option value=aluno_1>ROGER</option>
+      <option value=aluno_2>D. SILVA</option>
+      <option value=aluno_3>GABRIEL PIMENTEL</option>
+      <option value=aluno_4>REBELO</option>
+      <option value=aluno_5>DAVI COSTA</option>
+      <option value=aluno_6>GOES</option>
+      <option value=aluno_7>FRANCO</option>
+      <option value=aluno_8>CONTILE</option>
+      <option value=aluno_9>LOBO</option>
+      <option value=aluno_10>GUILHERME SOUZA</option>
+      <option value=aluno_11>ALMEIDA</option>
+      <option value=aluno_12>DOS REIS</option>
+      <option value=aluno_13>MATEUS RIBEIRO</option>
+      <option value=aluno_14>SAMUEL VICTOR</option>
+      <option value=aluno_15>YURY LINS</option>
+      <option value=aluno_16>J. VICTOR</option>
+      <option value=aluno_17>LUCAS RYAN</option>
+      <option value=aluno_18>ROSANOVA</option>
+      <option value=aluno_19>CORDEIRO SILVA</option>
+      <option value=aluno_20>TEODORO</option>
+      <option value=aluno_21>DAVI CARLOS</option>
+      <option value=aluno_22>L MARTINS</option>
+      <option value=aluno_23>CAIO NASCIMENTO</option>
+      <option value=aluno_24>MATHEUS SILVA</option>
+      <option value=aluno_25>CÉSAR</option>
+      <option value=aluno_26>CESTARO</option>
+      <option value=aluno_27>PERROTTE</option>
+      <option value=aluno_28>WAGNER PEREIRA</option>
+      <option value=aluno_29>CLEMENTE</option>
+      <option value=aluno_30>WALLACE OLIVEIRA</option>
+      <option value=aluno_31>ESTEVÃO</option>
+      <option value=aluno_32>PEDRO CARVALHO</option>
+      <option value=aluno_33>R. SILVA</option>
+      <option value=aluno_34>GUILHERME FERREIRA</option>
+      <option value=aluno_35>QUEIROZ</option>
+      <option value=aluno_36>LEMOS</option>
+      <option value=aluno_37>LIESSI</option>
+      <option value=aluno_38>REIS SOUSA</option>
+      <option value=aluno_39>SOUZA MOTA</option>
+      <option value=aluno_40>ALCÂNTARA</option>
+      <option value=aluno_41>ADRIEL VALENÇA</option>
+      <option value=aluno_42>THALES</option>
+      <option value=aluno_43>VICTOR PEREIRA</option>
+      <option value=aluno_44>VALE</option>
+      <option value=aluno_45>LUIZ SANTOS</option>
+      <option value=aluno_46>BERTUCE</option>
+      <option value=aluno_47>KAUÃ SOUZA</option>
+      <option value=aluno_48>CLÁUDIO</option>
+      <option value=aluno_49>DE ALBUQUERQUE</option>
+      <option value=aluno_50>GABRIEL SILVA</option>
+      <option value=aluno_51>MENDONÇA</option>
+      <option value=aluno_52>AMORIM</option>
+      <option value=aluno_53>P MOURA</option>
+      <option value=aluno_54>EDUARDO</option>
+      <option value=aluno_55>TAUAN</option>
+      <option value=aluno_56>V. MAGALHÃES</option>
+      <option value=aluno_57>CONCEIÇÃO</option>
+      <option value=aluno_58>CYRILLO</option>
+      <option value=aluno_59>LUCAS ABREU</option>
+      <option value=aluno_60>BARCELLOS</option>
+      <option value=aluno_61>MAURO</option>
+      <option value=aluno_62>LISBOA</option>
+      <option value=aluno_63>GUEDES</option>
+      <option value=aluno_64>PRADO</option>
+      <option value=aluno_65>THIAGO WESLLEY</option>
+      <option value=aluno_66>STELLE</option>
+      <option value=aluno_67>MEIRELES</option>
+      <option value=aluno_68>MONTANHA</option>
+      <option value=aluno_69>VITOR</option>
+      <option value=aluno_70>MATHEUS BARBOSA´</option>
+      <option value=aluno_71>ANTONIO SILVA</option>
+      <option value=aluno_72>ASSUNÇÃO</option>
+      <option value=aluno_73>GABRIEL AMORA</option>
+      <option value=aluno_74>VERRI</option>
+      <option value=aluno_75>DE ANGELO</option>
+      <option value=aluno_76>JOÃO CESÁRIO</option>
+      <option value=aluno_77>LUCAS ALVES</option>
+      <option value=aluno_78>L. SILVEIRA</option>
+      <option value=aluno_79>FAGUNDES</option>
+      <option value=aluno_80>COSTA</option>
+      <option value=aluno_81>AURINO</option>
+      <option value=aluno_82>R. MOURA</option>
+      <option value=aluno_83>JULIACI</option>
+      <option value=aluno_84>LUAN SILVA</option>
+      <option value=aluno_85>JOÃO SANTOS</option>
+      <option value=aluno_86>ARTHUR</option>
+      <option value=aluno_87>ISIDORO</option>
+      <option value=aluno_88>ENZO FERRARI</option>
+      <option value=aluno_89>CARLOS EDUARDO</option>
+      <option value=aluno_90>FEITOSA</option>
+      <option value=aluno_91>CAPUTO</option>
+      <option value=aluno_92>DE CASTRO</option>
+      <option value=aluno_93>LUCAS CRUZ</option>
+      <option value=aluno_94>DIOGO VINÍCIUS</option>
+      <option value=aluno_95>VICTOR SANTOS</option>
+      <option value=aluno_96>E FAGNER</option>
+      <option value=aluno_97>SILVA GOMES</option>
+      <option value=aluno_98>PIRES SOUZA</option>
+      <option value=aluno_99>C.ALCÂNTARA</option>
+      <option value=aluno_100>JULIÃO</option>
+      <option value=aluno_101>CAMPOS</option>
+      <option value=aluno_102>MAURILIO</option>
+      <option value=aluno_103>JOÃO RODRIGUES</option>
+      <option value=aluno_104>LATTO</option>
+      <option value=aluno_105>BASTOS</option>
+      <option value=aluno_106>TEOFILO</option>
+      <option value=aluno_107>MARCENES</option>
+      <option value=aluno_108>FRANK</option>
+      <option value=aluno_109>FARIAS</option>
+      <option value=aluno_110>JEZIEL</option>
+      <option value=aluno_111>J. RIBEIRO</option>
+      <option value=aluno_112>EDUARDO NASCIMENTO</option>
+      <option value=aluno_113>F.DANTAS</option>
+      <option value=aluno_114>NASCIMENTO ANTUNES</option>
+      <option value=aluno_115>SIMÕES</option>
+      <option value=aluno_116>TRANCOZO</option>
+      <option value=aluno_117>RITZMANN</option>
+      <option value=aluno_118>CASTRO ALVES</option>
+      <option value=aluno_119>CHRISTIAN</option>
+      <option value=aluno_120>S.GABRIEL</option>
+      <option value=aluno_121>DEIVISSON</option>
+      <option value=aluno_122>THOMAS</option>
+      <option value=aluno_123>CAMILO</option>
+      <option value=aluno_124>TAVARES NETO</option>
+      <option value=aluno_125>SERPA</option>
+      <option value=aluno_126>GIMENEZ</option>
+      <option value=aluno_127>ZAKUR</option>
+      <option value=aluno_128>CARVALHO SOUZA</option>
+      <option value=aluno_129>DE ARAÚJO</option>
+      <option value=aluno_130>DOMINGUES</option>
+        </select>
+</div>
+
+    <!-- M1 e M2 -->
+    <div class="materia">
+    <h3 id="titulo-m1">Técnicas Militares</h3>
+      <label>AA </label>
+      <input type="number" id="m1_aa_f" placeholder="ACERTOS" oninput="calcular()">
+      <input type="number" id="m1_aa_t" placeholder="TOTAL" oninput="calcular()">
+      <div class="nota-prova" id="prev_m1_aa">Nota AA: 8.667</div>
+
+      <label>AC </label>
+      <input type="number" id="m1_ac_f" placeholder="ACERTOS" oninput="calcular()">
+      <input type="number" id="m1_ac_t" placeholder="TOTAL" oninput="calcular()">
+      <div class="nota-prova" id="prev_m1_ac">Nota AC: 7.500</div>
+
+      <div class="resultado" id="res_m1">MÉDIA DE Técnicas Militares: 7.889</div>
+      <div id="prev_m1"></div>
+    </div>
+
+<div class="materia">
+ <h3 id="titulo-m2">Fundamentos das Comunicações</h3>
+
+  <label>AA</label>
+  <input type="number" id="m2_aa_f" placeholder="ACERTOS" oninput="calcular()">
+  <input type="number" id="m2_aa_t" placeholder="TOTAL" oninput="calcular()">
+  <div class="nota-prova" id="prev_m2_aa">Nota AA: 8.621</div>
+
+  <label>AC</label>
+  <input type="number" id="m2_ac_f" placeholder="ACERTOS" oninput="calcular()">
+  <input type="number" id="m2_ac_t" placeholder="TOTAL" oninput="calcular()">
+  <div class="nota-prova" id="prev_m2_ac">Nota AC: 10.000</div>
+
+  <div class="resultado" id="res_m2">MÉDIA DE Fundamentos das Comunicações: 9.540</div>
+</div>
+
+
+    <!-- M3, M4, M5 -->
+<div class="materia">
+ <h3 id="titulo-m3">Cibernética</h3>
+
+  <label>AA1</label>
+  <input type="number" id="m3_aa1_f" placeholder="ACERTOS" oninput="calcular()">
+  <input type="number" id="m3_aa1_t" placeholder="TOTAL" oninput="calcular()">
+  <div class="nota-prova" id="prev_m3_aa1">Nota AA1: 7.500</div>
+
+  <label>AA2</label>
+  <input type="number" id="m3_aa2_f" placeholder="ACERTOS" oninput="calcular()">
+  <input type="number" id="m3_aa2_t" placeholder="TOTAL" oninput="calcular()">
+  <div class="nota-prova" id="prev_m3_aa2">Nota AA2: 5.333</div>
+
+  <label>AC</label>
+  <input type="number" id="m3_ac_f" placeholder="ACERTOS" oninput="calcular()">
+  <input type="number" id="m3_ac_t" placeholder="TOTAL" oninput="calcular()">
+  <div class="nota-prova" id="prev_m3_ac">Nota AC: 10.000</div>
+
+  <div class="resultado" id="res_m3">MÉDIA DE Cibernética: 8.208</div>
+</div>
+
+<div class="materia" id="m4">
+  <h3 id="titulo-m4">TAF</h3>
+
+  <div class="prova">
+    <span class="label">Barra Fixa</span>
+    <div class="taf-row">
+      <div class="taf-input-group">
+        <label style="margin:0; font-size:10px;">AA</label>
+        <input id="m4_barra_aa" type="text" placeholder="Repetições" oninput="calcular()">
+        <div id="prev_m4_barra_aa" class="nota-preview-taf">Nota: 10.0</div>
+      </div>
+      <div class="taf-input-group">
+        <label style="margin:0; font-size:10px;">AC</label>
+        <input id="m4_barra_ac" type="text" placeholder="Repetições" oninput="calcular()">
+        <div id="prev_m4_barra_ac" class="nota-preview-taf">Nota: 10.0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="prova">
+    <span class="label">Corrida</span>
+    <div class="taf-row">
+      <div class="taf-input-group">
+        <label style="margin:0; font-size:10px;">AA</label>
+        <input id="m4_corrida_aa" placeholder="Tempo (ex: 11:00)" oninput="mascaraTempo(this); calcular()">
+        <div id="prev_m4_corrida_aa" class="nota-preview-taf">Nota: 7.5</div>
+      </div>
+      <div class="taf-input-group">
+        <label style="margin:0; font-size:10px;">AC</label>
+        <input id="m4_corrida_ac" placeholder="Tempo (ex: 10:45)" oninput="mascaraTempo(this); calcular()">
+        <div id="prev_m4_corrida_ac" class="nota-preview-taf">Nota: 9.0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="prova">
+    <span class="label">Flexão</span>
+    <div class="taf-row">
+      <div class="taf-input-group">
+        <label style="margin:0; font-size:10px;">AA</label>
+        <input id="m4_flexao_aa" placeholder="Repetições" oninput="calcular()">
+        <div id="prev_m4_flexao_aa" class="nota-preview-taf">Nota: 10.0</div>
+      </div>
+      <div class="taf-input-group">
+        <label style="margin:0; font-size:10px;">AC</label>
+        <input id="m4_flexao_ac" placeholder="Repetições" oninput="calcular()">
+        <div id="prev_m4_flexao_ac" class="nota-preview-taf">Nota: 9.0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="prova">
+    <span class="label">Natação</span>
+    <div class="taf-row">
+      <div class="taf-input-group">
+        <label style="margin:0; font-size:10px;">AA</label>
+        <input id="m4_natacao_aa" placeholder="Tempo (ex: 00:20)" oninput="mascaraTempo(this); calcular()">
+        <div id="prev_m4_natacao_aa" class="nota-preview-taf">Nota: 4.0</div>
+      </div>
+      <div class="taf-input-group">
+        <label style="margin:0; font-size:10px;">AC</label>
+        <input id="m4_natacao_ac" placeholder="Tempo (ex: 00:18)" oninput="mascaraTempo(this); calcular()">
+        <div id="prev_m4_natacao_ac" class="nota-preview-taf">Nota: 8.0</div>
+      </div>
+    </div>
+  </div>
+
+<div class="prova">
+  <span class="label">PPM</span>
+  <div class="taf-row">
+    <div class="taf-input-group">
+      <label style="margin:0; font-size:10px;">AA</label>
+      <input id="m4_ppm_aa" placeholder="Tempo (ex: 0430)" oninput="mascaraTempo(this); calcular()">
+      <div id="prev_m4_ppm_aa" class="nota-preview-taf">--</div>
+    </div>
+    <div class="taf-input-group">
+      <label style="margin:0; font-size:10px;">AC</label>
+      <input id="m4_ppm_ac" placeholder="Tempo (ex: 0420)" oninput="mascaraTempo(this); calcular()">
+      <div id="prev_m4_ppm_ac" class="nota-preview-taf">--</div>
+    </div>
+  </div>
+</div>
+
+  <div class="prova">
+    <span class="label">Corda</span>
+    <div class="taf-row">
+      <div class="taf-input-group">
+        <label style="margin:0; font-size:10px;">AA</label>
+        <input id="m4_corda_aa" placeholder="Metros (ex: 4.8)" oninput="calcular()">
+        <div id="prev_m4_corda_aa" class="nota-preview-taf">Nota: 10.0</div>
+      </div>
+      <div class="taf-input-group">
+        <label style="margin:0; font-size:10px;">AC</label>
+        <input id="m4_corda_ac" placeholder="Metros (ex: 5.0)" oninput="calcular()">
+        <div id="prev_m4_corda_ac" class="nota-preview-taf">Nota: 10.0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="resultado" id="res_m4">MÉDIA DE TAF: 8.778</div>
+</div>
+
+<div class="materia">
+  <h3 id="titulo-m5">Tática</h3>
+
+  <label>AA1</label>
+  <input type="number" id="m5_aa1_f" placeholder="ACERTOS" oninput="calcular()">
+  <input type="number" id="m5_aa1_t" placeholder="TOTAL" oninput="calcular()">
+  <div class="nota-prova" id="prev_m5_aa1">Nota AA1: 9.455</div>
+
+  <label>AA2</label>
+  <input type="number" id="m5_aa2_f" placeholder="ACERTOS" oninput="calcular()">
+  <input type="number" id="m5_aa2_t" placeholder="TOTAL" oninput="calcular()">
+  <div class="nota-prova" id="prev_m5_aa2">Nota AA2: 9.333</div>
+
+  <label>AC</label>
+  <input type="number" id="m5_ac_f" placeholder="ACERTOS" oninput="calcular()">
+  <input type="number" id="m5_ac_t" placeholder="TOTAL" oninput="calcular()">
+  <div class="nota-prova" id="prev_m5_ac">Nota AC: 10.000</div>
+
+  <div class="resultado" id="res_m5">MÉDIA DE Tática: 9.697</div>
+</div>
+  <div class="final" id="media_final">MÉDIA FINAL: 8.822</div>
+  
+<div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+    
+    <button onclick="salvarDados()" style="width: 100%; padding: 15px; background: #007bff; color: white; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+        💾 SALVAR PROGRESSO DO ALUNO
+    </button>
+
+    <div style="display: flex; gap: 10px;">
+        <button onclick="exportarPlanilha()" style="flex: 1; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer;">
+            Exportar CSV
+        </button>
+        <button onclick="limparTudo()" style="flex: 1; padding: 12px; background: #ff4d4d; color: white; border: none; border-radius: 8px; cursor: pointer;">
+            Limpar Tudo
+        </button>
+    </div>
+</div>
+
+</div>
+
+<script>
+// Mapeamento dos nomes das matérias
+const materias = {
+  m1: 'Técnicas Militares',
+  m2: 'Fundamentos das Comunicações',
+  m3: 'Cibernética',
+  m4: 'TAF',
+  m5: 'Português'
+};
+
+/* PARA PROVAS DE TEMPO (Corrida, Natação, PPM):
+  A lógica usada é 'max' (teto). Se você fez MENOS ou IGUAL ao tempo, ganha a nota.
+  Os valores estão em SEGUNDOS.
+*/
+
+// [cite: 4] PED 001 - CORRIDA 3.000m
+const tabelaCorrida = {
+  aa: [
+    { max: 660, nota: 10 },
+    { max: 672, nota: 9.5 },
+    { max: 684, nota: 9 },
+    { max: 697, nota: 8.5 },
+    { max: 709, nota: 8 },
+    { max: 721, nota: 7.5 },
+    { max: 733, nota: 7 },
+    { max: 745, nota: 6.5 },
+    { max: 757, nota: 6 },
+    { max: 783, nota: 5 },
+    { max: 795, nota: 4.5 },
+    { max: 808, nota: 4 },
+    { max: 820, nota: 3.5 },
+    { max: 832, nota: 3 },
+    { max: 845, nota: 2.5 },
+    { max: 857, nota: 2 },
+    { max: 899, nota: 1.5 },
+    { max: 911, nota: 1 },
+    { max: 923, nota: 0.5 },
+    { max: 936, nota: 0 },
+    { max: 960, nota: 0 }
+  ],
+  ac: [
+    { max: 645, nota: 10 },
+    { max: 656, nota: 9.5 },
+    { max: 668, nota: 9 },
+    { max: 680, nota: 8.5 },
+    { max: 692, nota: 8 },
+    { max: 704, nota: 7.5 },
+    { max: 716, nota: 7 },
+    { max: 728, nota: 6.5 },
+    { max: 740, nota: 6 },
+    { max: 752, nota: 5 },
+    { max: 765, nota: 4.5 },
+    { max: 778, nota: 4 },
+    { max: 791, nota: 3.5 },
+    { max: 827, nota: 3 },
+    { max: 845, nota: 2.5 },
+    { max: 857, nota: 2 },
+    { max: 869, nota: 1.5 },
+    { max: 881, nota: 1 },
+    { max: 894, nota: 0.5 },
+    { max: 895, nota: 0 },
+    { max: 895, nota: 0 }
+  ]
+};
+
+// [cite: 21] PED 004 - BARRA FIXA
+const tabelaBarra = {
+  aa: [
+    { min: 12, nota: 10 },
+    { min: 11, nota: 9 },
+    { min: 10, nota: 8 },
+    { min: 9, nota: 7 },
+    { min: 8, nota: 6 },
+    { min: 7, nota: 5 },
+    { min: 6, nota: 4 },
+    { min: 5, nota: 3 },
+    { min: 4, nota: 2 },
+    { min: 3, nota: 1 },
+    { min: 2, nota: 0 }
+  ],
+  ac: [
+    { min: 13, nota: 10 },
+    { min: 12, nota: 9 },
+    { min: 11, nota: 8 },
+    { min: 10, nota: 7 },
+    { min: 9, nota: 6 },
+    { min: 8, nota: 5 },
+    { min: 7, nota: 4 },
+    { min: 6, nota: 3 },
+    { min: 5, nota: 2 },
+    { min: 4, nota: 1 },
+    { min: 3, nota: 0 }
+  ]
+};
+
+// [cite: 8] PED 002 - FLEXÃO DE BRAÇOS
+const tabelaFlexao = {
+  aa: [
+    { min: 42, nota: 10 },
+    { min: 40, nota: 9 },
+    { min: 38, nota: 8 },
+    { min: 35, nota: 7 },
+    { min: 32, nota: 6 },
+    { min: 30, nota: 5 },
+    { min: 28, nota: 4 },
+    { min: 26, nota: 3 },
+    { min: 25, nota: 2 },
+    { min: 24, nota: 1 },
+    { min: 23, nota: 0 }
+  ],
+  ac: [
+    { min: 43, nota: 10 },
+    { min: 41, nota: 9 },
+    { min: 39, nota: 8 },
+    { min: 36, nota: 7 },
+    { min: 32, nota: 6 },
+    { min: 31, nota: 5 },
+    { min: 30, nota: 4 },
+    { min: 29, nota: 3 },
+    { min: 28, nota: 2 },
+    { min: 27, nota: 1 },
+    { min: 26, nota: 0 }
+  ]
+};
+
+// [cite: 17] PED 005 - NATAÇÃO 25m
+const tabelaNatacao = {
+  aa: [
+    { max: 17, nota: 10 },
+    { max: 18, nota: 9.5 },
+    { max: 20, nota: 9 },
+    { max: 21, nota: 8.5 },
+    { max: 24, nota: 8 },
+    { max: 25, nota: 7.5 },
+    { max: 26, nota: 7 },
+    { max: 28, nota: 6.5 },
+    { max: 32, nota: 6 },
+    { max: 37, nota: 5.5 },
+    { max: 42, nota: 5 },
+    { max: 47, nota: 4.5 },
+    { max: 52, nota: 4 },
+    { max: 54, nota: 3.5 },
+    { max: 56, nota: 3 },
+    { max: 58, nota: 2.5 },
+    { max: 60, nota: 2 },
+    { max: 62, nota: 1.5 },
+    { max: 64, nota: 1 },
+    { max: 65, nota: 0 }
+  ],
+  ac: [
+    { max: 15, nota: 10 },
+    { max: 16, nota: 9.5 },
+    { max: 18, nota: 9 },
+    { max: 19, nota: 8.5 },
+    { max: 22, nota: 8 },
+    { max: 23, nota: 7.5 },
+    { max: 24, nota: 7 },
+    { max: 26, nota: 6.5 },
+    { max: 30, nota: 6 },
+    { max: 35, nota: 5.5 },
+    { max: 40, nota: 5 },
+    { max: 45, nota: 4.5 },
+    { max: 50, nota: 4 },
+    { max: 52, nota: 3.5 },
+    { max: 54, nota: 3 },
+    { max: 56, nota: 2.5 },
+    { max: 58, nota: 2 },
+    { max: 60, nota: 1.5 },
+    { max: 62, nota: 1 },
+    { max: 63, nota: 0 }
+  ]
+};
+
+// [cite: 25] PED 007 - PPM (PENTATLO)
+const tabelaPPM = {
+  aa: [
+    { max: 270, nota: 10 },
+    { max: 272, nota: 9.5 },
+    { max: 274, nota: 9 },
+    { max: 279, nota: 8.5 },
+    { max: 284, nota: 8 },
+    { max: 289, nota: 7.5 },
+    { max: 294, nota: 7 },
+    { max: 304, nota: 6.5 },
+    { max: 315, nota: 6 },
+    { max: 331, nota: 5.5 },
+    { max: 341, nota: 5 },
+    { max: 360, nota: 4.5 },
+    { max: 375, nota: 4 },
+    { max: 390, nota: 3.5 },
+    { max: 405, nota: 3 },
+    { max: 420, nota: 2.5 },
+    { max: 435, nota: 2 },
+    { max: 450, nota: 1.5 },
+    { max: 465, nota: 1 },
+    { max: 473, nota: 0 }
+
+  ],
+  ac: [
+    { max: 260, nota: 10.0 },
+    { max: 262, nota: 9.5 },
+    { max: 264, nota: 9.0 },
+    { max: 269, nota: 8.5 },
+    { max: 274, nota: 8 },
+    { max: 279, nota: 7.5 },
+    { max: 284, nota: 7 },
+    { max: 294, nota: 6.5 },
+    { max: 305, nota: 6 },
+    { max: 321, nota: 5.5 },
+    { max: 331, nota: 5 },
+    { max: 343, nota: 4.5 },
+    { max: 358, nota: 4 },
+    { max: 373, nota: 3.5 },
+    { max: 388, nota: 3 },
+    { max: 403, nota: 2.5 },
+    { max: 418, nota: 2 },
+    { max: 433, nota: 1.5 },
+    { max: 448, nota: 1 },
+    { max: 463, nota: 0 }
+  ]
+};
+
+// [cite: 29] PED 006 - CORDA
+const tabelaCorda = {
+  aa: [
+    { min: 4.8, nota: 10 },
+    { min: 4.6, nota: 9 },
+    { min: 4.4, nota: 8 },
+    { min: 4.2, nota: 7 },
+    { min: 4, nota: 6 },
+    { min: 3.8, nota: 5 },
+    { min: 3.6, nota: 4 },
+    { min: 3.4, nota: 3 },
+    { min: 3.2, nota: 2 },
+    { min: 3.0, nota: 1 },
+    { min: 2.9, nota: 0 }
+  ],
+  ac: [
+    { min: 5, nota: 10 },
+    { min: 4.8, nota: 9 },
+    { min: 4.6, nota: 8 },
+    { min: 4.4, nota: 7 },
+    { min: 4.2, nota: 6 },
+    { min: 4, nota: 5 },
+    { min: 3.8, nota: 4 },
+    { min: 3.6, nota: 3 },
+    { min: 3.4, nota: 2 },
+    { min: 3.2, nota: 1 },
+    { min: 3.19, nota: 0 }
+  ]
+};
+
+function limparTudo() {
+    // 1. Limpa todos os inputs (notas e repetições)
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+        input.value = "";
+    });
+
+    // 2. Limpa os textos de "Nota: --" (os previews)
+    const previews = document.querySelectorAll('.nota-preview, .nota-preview-taf');
+    previews.forEach(prev => {
+        prev.innerText = "--";
+    });
+
+    // 3. Reseta os resultados das médias de cada matéria
+    const resultados = ['res_m1', 'res_m2', 'res_m3', 'res_m4', 'res_m5'];
+    resultados.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = "MÉDIA: --";
+    });
+
+    // 4. Reseta a Média Final
+    const mediaFinal = document.getElementById('media_final');
+    if (mediaFinal) {
+        mediaFinal.innerText = "MÉDIA FINAL: --";
+        mediaFinal.style.color = "white"; // Volta a cor original
+    }
+    
+    // Opcional: Rola a página para o topo após limpar
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function mascaraTempo(input) {
+  // Remove tudo que não for número
+  let v = input.value.replace(/\D/g, "");
+  
+  // Limita a 4 caracteres (MMSS)
+  if (v.length > 4) v = v.substring(0, 4);
+  
+  // Aplica a formatação 00:00
+  if (v.length >= 3) {
+    v = v.substring(0, v.length - 2) + ":" + v.substring(v.length - 2);
+  }
+  
+  // Atualiza o valor no campo
+  input.value = v;
+}
+
+// Função auxiliar para converter "MM:SS" em segundos inteiros
+function parseTempo(valor) {
+  if (!valor || typeof valor !== 'string') return NaN;
+  
+  if (valor.includes(':')) {
+    const partes = valor.split(':');
+    if (partes.length === 2 && partes[1] !== "") {
+      const min = parseInt(partes[0], 10) || 0;
+      const seg = parseInt(partes[1], 10) || 0;
+      return (min * 60) + seg;
+    }
+  }
+  return NaN; 
+}
+
+function notaPorTabela(valorInput, tabela, tipo) {
+  if (valorInput === "") return null;
+
+  let valor;
+  
+  if (tipo === 'max') { 
+    // Se for tempo (Corrida, Natação, PPM), usamos o parse de tempo
+    valor = parseTempo(valorInput);
+  } else {
+    // Se for repetição (Barra, Flexão, Corda), usamos número inteiro
+    // Isso evita que "12" vire segundos ou que ":" confunda o código
+    valor = parseFloat(valorInput.replace(',', '.'));
+  }
+  
+  if (isNaN(valor)) return null;
+
+  if (tipo === 'min') {
+    // Lógica para Barra/Flexão (Quanto MAIS, melhor)
+    for (let i = 0; i < tabela.length; i++) {
+      if (valor >= tabela[i].min) return tabela[i].nota;
+    }
+  } else {
+    // Lógica para Corrida/Natação (Quanto MENOS, melhor)
+    for (let i = 0; i < tabela.length; i++) {
+      if (valor <= tabela[i].max) return tabela[i].nota;
+    }
+  }
+  return 0.0;
+}
+
+function calcularProvaTAF(valorAA, valorAC, tabelas, tipo = 'min') {
+  const notaAA = notaPorTabela(valorAA, tabelas.aa, tipo);
+  const notaAC = notaPorTabela(valorAC, tabelas.ac, tipo);
+
+  if (notaAA === null || notaAC === null) return null;
+
+  return (notaAA + 2 * notaAC) / 3;
+}
+
+function aplicarNomesMaterias() {
+  for (const key in materias) {
+    const titulo = document.getElementById(`titulo-${key}`);
+    if (titulo) {
+      titulo.innerText = materias[key];
+    }
+  }
+}
+
+function nota(feito, total) {
+  if (total > 0 && !isNaN(feito)) {
+    return (feito / total) * 10;
+  }
+  return null;
+}
+
+function mostrarNota(id, nome, valor) {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  el.innerText =
+    valor !== null
+      ? `Nota ${nome}: ${valor.toFixed(3)}`
+      : `Nota ${nome}: --`;
+}
+
+function exportarPlanilha() {
+  // \ufeff garante que o Excel abra com acentos corretos no Windows
+  let csvContent = "\ufeff";
+  
+  // --- PARTE 1: NOTAS ACADÊMICAS (M1, M2, M3, M5) ---
+  csvContent += "DETALHAMENTO ACADÊMICO\n";
+  csvContent += "Matéria;Prova;Nota\n";
+
+  const materiasAcad = [
+    { id: 'm1', nome: materias.m1, provas: ['aa', 'ac'] },
+    { id: 'm2', nome: materias.m2, provas: ['aa', 'ac'] },
+    { id: 'm3', nome: materias.m3, provas: ['aa1', 'aa2', 'ac'] },
+    { id: 'm5', nome: materias.m5, provas: ['aa1', 'aa2', 'ac'] }
+  ];
+
+  materiasAcad.forEach(m => {
+    m.provas.forEach(p => {
+      const notaTexto = document.getElementById(`prev_${m.id}_${p}`).innerText;
+      const notaLimpa = notaTexto.split(':')[1]?.trim() || "--";
+      csvContent += `${m.nome};${p.toUpperCase()};${notaLimpa}\n`;
+    });
+    // Adiciona a média final daquela matéria
+    const mediaMateria = document.getElementById(`res_${m.id}`).innerText.split(':')[1]?.trim() || "--";
+    csvContent += `${m.nome};MÉDIA FINAL;${mediaMateria}\n\n`;
+  });
+
+  // --- PARTE 2: DETALHAMENTO DO TAF (M4) ---
+  csvContent += "DETALHAMENTO TAF\n";
+  csvContent += "Prova;Nota AA;Nota AC;Média Ponderada\n";
+
+  const configTAF = ['barra', 'corrida', 'flexao', 'natacao', 'ppm', 'corda'];
+  
+  configTAF.forEach(prova => {
+    const nomeProva = document.querySelector(`#m4 [id="prev_m4_${prova}_aa"]`).closest('.prova').querySelector('.label').innerText;
+    const notaAA = document.getElementById(`prev_m4_${prova}_aa`).innerText.split(':')[1]?.trim() || "--";
+    const notaAC = document.getElementById(`prev_m4_${prova}_ac`).innerText.split(':')[1]?.trim() || "--";
+    
+    // Calcula a média ponderada da prova (mesma lógica do TAF)
+    let mediaProva = "--";
+    if (notaAA !== "--" && notaAC !== "--") {
+        mediaProva = ((parseFloat(notaAA.replace(',','.')) + (2 * parseFloat(notaAC.replace(',','.')))) / 3).toFixed(3);
+    }
+    
+    csvContent += `${nomeProva};${notaAA};${notaAC};${mediaProva}\n`;
+  });
+
+  const mediaTAF = document.getElementById('res_m4').innerText.split(':')[1]?.trim() || "--";
+  csvContent += `MÉDIA GERAL TAF;;;${mediaTAF}\n\n`;
+
+  // --- PARTE 3: RESUMO FINAL ---
+  csvContent += "RESUMO GERAL\n";
+  const mediaFinalTotal = document.getElementById('media_final').innerText;
+  csvContent += `${mediaFinalTotal.replace(':', ';')}\n`;
+
+  // --- DOWNLOAD DO ARQUIVO ---
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", "boletim_completo_detalhado.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Função chamada toda vez que o aluno clica em "Salvar"
+// SALVAR NO FIREBASE
+function salvarDados() {
+    const nomeAluno = document.getElementById('selecao_aluno').value.trim();
+    if (!nomeAluno) { alert("Selecione um aluno!"); return; }
+
+    const dados = {};
+    document.querySelectorAll('input:not(#selecao_aluno)').forEach(input => {
+        dados[input.id] = input.value;
+    });
+
+    // Salva no caminho: alunos/NOME_DO_ALUNO
+    database.ref('alunos/' + nomeAluno).set(dados)
+        .then(() => alert("✅ Notas sincronizadas para toda a turma!"))
+        .catch(err => console.error(err));
+}
+
+// CARREGAR DO FIREBASE (Sincronização automática)
+function trocarAluno() {
+    const nomeAluno = document.getElementById('selecao_aluno').value.trim();
+    
+    // Escuta mudanças em tempo real para o aluno selecionado
+    database.ref('alunos/' + nomeAluno).once('value', (snapshot) => {
+        const dados = snapshot.val();
+        
+        // Limpa campos antes de preencher
+        document.querySelectorAll('input:not(#selecao_aluno)').forEach(input => input.value = "");
+
+        if (dados) {
+            Object.keys(dados).forEach(id => {
+                const campo = document.getElementById(id);
+                if (campo) campo.value = dados[id];
+            });
+            calcular();
+        }
+    });
+}
+
+// Função chamada quando o usuário troca o nome na lista suspensa
+function trocarAluno() {
+    const idAluno = document.getElementById('selecao_aluno').value;
+    const bancoTotal = JSON.parse(localStorage.getItem('banco_alunos') || "{}");
+
+    // Primeiro, limpamos todos os campos da tela (pode usar sua função limparTudo sem o alert)
+    document.querySelectorAll('input').forEach(input => input.value = "");
+
+    // Se existirem dados para o aluno selecionado, preenchemos
+    if (bancoTotal[idAluno]) {
+        const dadosAluno = bancoTotal[idAluno];
+        Object.keys(dadosAluno).forEach(idCampo => {
+            const campo = document.getElementById(idCampo);
+            if (campo) campo.value = dadosAluno[idCampo];
+        });
+        // Recalcula as médias automaticamente
+        calcular();
+    } else {
+        // Se não tiver dados salvos, apenas limpa os resultados
+        calcular(); 
+    }
+}
+
+function calcular() {
+  const notas = [];
+
+  // ===== M1 e M2 =====
+  for (let m = 1; m <= 2; m++) {
+    const aa = nota(
+      +document.getElementById(`m${m}_aa_f`).value,
+      +document.getElementById(`m${m}_aa_t`).value
+    );
+    const ac = nota(
+      +document.getElementById(`m${m}_ac_f`).value,
+      +document.getElementById(`m${m}_ac_t`).value
+    );
+
+    mostrarNota(`prev_m${m}_aa`, 'AA', aa);
+    mostrarNota(`prev_m${m}_ac`, 'AC', ac);
+
+    if (aa !== null && ac !== null) {
+      const media = (aa + 2 * ac) / 3;
+      document.getElementById(`res_m${m}`).innerText =
+        `MÉDIA DE ${materias[`m${m}`]}: ${media.toFixed(3)}`;
+      notas.push(media);
+    } else {
+      document.getElementById(`res_m${m}`).innerText =
+        `MÉDIA DE ${materias[`m${m}`]}: --`;
+    }
+  }
+
+  // ===== M3, M4 e M5 (Lógica Acadêmica) =====
+  for (let m = 3; m <= 5; m++) {
+    if (m === 4) continue; // Pula M4 pois é TAF (tratado abaixo)
+    const aa1 = nota(
+      +document.getElementById(`m${m}_aa1_f`).value,
+      +document.getElementById(`m${m}_aa1_t`).value
+    );
+    const aa2 = nota(
+      +document.getElementById(`m${m}_aa2_f`).value,
+      +document.getElementById(`m${m}_aa2_t`).value
+    );
+    const ac = nota(
+      +document.getElementById(`m${m}_ac_f`).value,
+      +document.getElementById(`m${m}_ac_t`).value
+    );
+
+    mostrarNota(`prev_m${m}_aa1`, 'AA1', aa1);
+    mostrarNota(`prev_m${m}_aa2`, 'AA2', aa2);
+    mostrarNota(`prev_m${m}_ac`, 'AC', ac);
+
+    if (aa1 !== null && aa2 !== null && ac !== null) {
+      const media = (aa1 + aa2 + 2 * ac) / 4;
+      document.getElementById(`res_m${m}`).innerText =
+        `MÉDIA DE ${materias[`m${m}`]}: ${media.toFixed(3)}`;
+      notas.push(media);
+    } else {
+      document.getElementById(`res_m${m}`).innerText =
+        `MÉDIA DE ${materias[`m${m}`]}: --`;
+    }
+  }
+
+  // ===== M4 (TAF) =====
+  const notasTAF = [];
+  
+  // Configuração das provas para automatizar o cálculo e a exibição
+  const configTAF = [
+    { id: 'barra', tabela: tabelaBarra, tipo: 'min' }, // O ID aqui deve ser 'barra'
+    { id: 'corrida', tabela: tabelaCorrida, tipo: 'max' },
+    { id: 'flexao', tabela: tabelaFlexao, tipo: 'min' },
+    { id: 'natacao', tabela: tabelaNatacao, tipo: 'max' },
+    { id: 'ppm', tabela: tabelaPPM, tipo: 'max' },
+    { id: 'corda', tabela: tabelaCorda, tipo: 'min' }
+  ];
+
+  configTAF.forEach(prova => {
+    // 1. Pega os valores dos inputs
+    const valAA = document.getElementById(`m4_${prova.id}_aa`).value;
+    const valAC = document.getElementById(`m4_${prova.id}_ac`).value;
+
+    // 2. Calcula a nota INDIVIDUAL (para mostrar a prévia)
+    // Usamos parseTempo para garantir que 11:00 vire segundos
+    const notaAA = notaPorTabela(valAA, prova.tabela.aa, prova.tipo);
+    const notaAC = notaPorTabela(valAC, prova.tabela.ac, prova.tipo);
+
+    // 3. Atualiza o texto na tela (Prévia)
+    const elPrevAA = document.getElementById(`prev_m4_${prova.id}_aa`);
+    const elPrevAC = document.getElementById(`prev_m4_${prova.id}_ac`);
+
+    if (elPrevAA) elPrevAA.innerText = notaAA !== null ? `Nota: ${notaAA.toFixed(1)}` : '--';
+    if (elPrevAC) elPrevAC.innerText = notaAC !== null ? `Nota: ${notaAC.toFixed(1)}` : '--';
+
+    // 4. Se tiver as duas notas, calcula a média ponderada e guarda
+    if (notaAA !== null && notaAC !== null) {
+      const mediaProva = (notaAA + (2 * notaAC)) / 3;
+      notasTAF.push(mediaProva);
+    }
+  });
+
+  // Cálculo da Média Geral do TAF
+  if (notasTAF.length > 0) {
+    // Somamos todas as médias das provas preenchidas e dividimos pela quantidade delas
+    const mediaTAF = notasTAF.reduce((a, b) => a + b, 0) / notasTAF.length;
+    
+    document.getElementById('res_m4').innerText =
+      `MÉDIA DE ${materias.m4}: ${mediaTAF.toFixed(3)}`;
+    
+    // Adiciona a média do TAF na lista global de notas para a Média Final
+    notas.push(mediaTAF);
+  } else {
+    document.getElementById('res_m4').innerText =
+      `MÉDIA DE ${materias.m4}: --`;
+  }
+
+  // ===== Média FINAL =====
+  const mediaFinalEl = document.getElementById('media_final');
+  if (notas.length > 0) {
+    const mediaFinal = notas.reduce((a, b) => a + b, 0) / notas.length;
+    mediaFinalEl.innerText = `MÉDIA FINAL: ${mediaFinal.toFixed(3)}`;
+  } else {
+    mediaFinalEl.innerText = 'MÉDIA FINAL: --';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  aplicarNomesMaterias();
+  calcular();
+});
+</script>
+</body></html>
